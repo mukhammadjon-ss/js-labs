@@ -8,3 +8,6 @@ class User {
         return inputPassword == this._password;
     }
 }
+
+const usr1 = new User("electronicTiger", "mySeCrEtPa$$wrd");
+console.log(usr1.validateLogin("12345678")); // false
