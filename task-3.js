@@ -16,7 +16,7 @@ class Library{
         const bookExists = this.books.find(b => b.isbn === book.isbn);
         if(book && !bookExists){
             this.books.push(book);
-            // console.log('Book successfully added to the library.');
+            console.log('Book successfully added to the library.');
         } else{
             console.log("Book already exists in the library");
         }
@@ -24,8 +24,8 @@ class Library{
 
     removeBook(isbn){
         this.books = this.books.filter(book => book.isbn !== isbn);
-        console.log(this.books); // shows updated array of books   <====
-        // console.log("Book successfully removed.");
+        console.log("Book successfully removed.");
+        return this.books;
     }
 };
 
@@ -39,9 +39,7 @@ const lib = new Library(arrayOfBooks);
 lib.addBook(goneWithTheWind);
 lib.addBook(janeEyre);
 
-// console.log(arrayOfBooks);
+console.log(arrayOfBooks);
 
 lib.removeBook("9780393043426");
-lib.removeBook("9780140814910");
-
-console.log(arrayOfBooks); // but here I'm getting old array of books
+console.log(lib.removeBook("9780140814910"));
