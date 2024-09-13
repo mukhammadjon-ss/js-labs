@@ -113,6 +113,14 @@ Create an abstract class representing a basic shape and extend it to implement s
 
 ## **Example:**
 
+```typescript
+const circle = new Circle(5);
+circle.describe();
+
+const rectangle = new Rectangle(4, 7);
+rectangle.describe();
+```
+
 # Single Responsibility Principle (SRP) Example in TypeScript
 
 The Single Responsibility Principle (SRP) is one of the SOLID principles of object-oriented design. It states that a class should have only one reason to change, meaning it should only have one responsibility or job.
