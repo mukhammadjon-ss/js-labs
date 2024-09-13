@@ -113,14 +113,6 @@ Create an abstract class representing a basic shape and extend it to implement s
 
 ## **Example:**
 
-````typescript
-// Create instances and test
-const circle = new Circle(5);
-circle.describe(); // Output: The area of this shape is 78.53981633974483 square units.
-
-const rectangle = new Rectangle(4, 7);
-rectangle.describe(); // Output: The area of this shape is 28 square units.
-
 # Single Responsibility Principle (SRP) Example in TypeScript
 
 The Single Responsibility Principle (SRP) is one of the SOLID principles of object-oriented design. It states that a class should have only one reason to change, meaning it should only have one responsibility or job.
@@ -181,7 +173,7 @@ class UserAuthenticator {
 }
 
 // main.ts
-const user = new User('john_doe', 'securepassword123');
+const user = new User("john_doe", "securepassword123");
 const userNotification = new UserNotification();
 const userAuthenticator = new UserAuthenticator();
 
@@ -189,15 +181,17 @@ const userAuthenticator = new UserAuthenticator();
 userNotification.sendWelcomeEmail(user);
 
 // Authenticate user
-const isAuthenticated = userAuthenticator.authenticate(user, 'securepassword123');
+const isAuthenticated = userAuthenticator.authenticate(
+  user,
+  "securepassword123"
+);
 
 if (isAuthenticated) {
-  console.log('User is authenticated');
+  console.log("User is authenticated");
 } else {
-  console.log('User is not authenticated');
+  console.log("User is not authenticated");
 }
-
-````
+```
 
 # Open/Closed Principle (OCP) Example in TypeScript
 
