@@ -121,3 +121,112 @@ circle.describe(); // Output: The area of this shape is 78.53981633974483 square
 const rectangle = new Rectangle(4, 7);
 rectangle.describe(); // Output: The area of this shape is 28 square units.
 ```
+
+# Open/Closed Principle (OCP) Example in TypeScript
+
+The Open/Closed Principle (OCP) is one of the SOLID principles of object-oriented design. It states that a class should be open for extension but closed for modification. This means you should be able to extend a class's behavior without changing its existing code.
+
+## Example: Payment Processing System
+
+In this example, we'll demonstrate how to apply the Open/Closed Principle using a payment processing system. We'll define an abstract class for payment methods and create concrete implementations for different types of payments. Our payment processor will be able to handle any payment method without modification.
+
+### 1. Define an Abstract Class `PaymentMethod`
+
+Create an abstract class that defines the common behavior for all payment methods.
+
+```typescript
+// PaymentMethod.ts
+abstract class PaymentMethod {
+  protected amount: number;
+
+  constructor(amount: number) {
+    this.amount = amount;
+  }
+
+  // Abstract method to be implemented by subclasses
+  abstract processPayment(): void;
+}
+
+// CreditCardPayment.ts
+class CreditCardPayment extends PaymentMethod {
+  private cardNumber: string;
+  private expirationDate: string;
+
+  constructor(amount: number, cardNumber: string, expirationDate: string) {
+    super(amount);
+    this.cardNumber = cardNumber;
+    this.expirationDate = expirationDate;
+  }
+
+  processPayment(): void {
+    console.log(
+      `Processing credit card payment of $${this.amount} using card: ${this.cardNumber}`
+    );
+    // Add logic for credit card payment
+  }
+}
+
+// PayPalPayment.ts
+class PayPalPayment extends PaymentMethod {
+  private email: string;
+  private password: string;
+
+  constructor(amount: number, email: string, password: string) {
+    super(amount);
+    this.email = email;
+    this.password = password;
+  }
+
+  processPayment(): void {
+    console.log(
+      `Processing PayPal payment of $${this.amount} using email: ${this.email}`
+  }
+}
+
+// CreditCardPayment.ts
+class CreditCardPayment extends PaymentMethod {
+  private cardNumber: string;
+  private expirationDate: string;
+
+  constructor(amount: number, cardNumber: string, expirationDate: string) {
+    super(amount);
+    this.cardNumber = cardNumber;
+    this.expirationDate = expirationDate;
+  }
+
+  processPayment(): void {
+    console.log(`Processing credit card payment of $${this.amount} using card: ${this.cardNumber}`);
+    // Add logic for credit card payment
+  }
+}
+
+// PayPalPayment.ts
+class PayPalPayment extends PaymentMethod {
+  private email: string;
+  private password: string;
+
+  constructor(amount: number, email: string, password: string) {
+    super(amount);
+    this.email = email;
+    this.password = password;
+  }
+
+  processPayment(): void {
+    console.log(`Processing PayPal payment of $${this.amount} using email: ${this.email}`);
+    // Add logic for PayPal payment
+  }
+}
+
+
+// main.ts
+const creditCardPayment = new CreditCardPayment(100, '4111111111111111', '12/25');
+const payPalPayment = new PayPalPayment(50, 'john.doe@example.com', 'password123');
+
+const creditCardProcessor = new PaymentProcessor(creditCardPayment);
+const payPalProcessor = new PaymentProcessor(payPalPayment);
+
+creditCardProcessor.process();
+payPalProcessor.process();
+
+
+```
