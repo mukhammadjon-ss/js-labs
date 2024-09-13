@@ -113,14 +113,91 @@ Create an abstract class representing a basic shape and extend it to implement s
 
 ## **Example:**
 
-```typescript
+````typescript
 // Create instances and test
 const circle = new Circle(5);
 circle.describe(); // Output: The area of this shape is 78.53981633974483 square units.
 
 const rectangle = new Rectangle(4, 7);
 rectangle.describe(); // Output: The area of this shape is 28 square units.
-```
+
+# Single Responsibility Principle (SRP) Example in TypeScript
+
+The Single Responsibility Principle (SRP) is one of the SOLID principles of object-oriented design. It states that a class should have only one reason to change, meaning it should only have one responsibility or job.
+
+## Example: User Management System
+
+In this example, we'll demonstrate how to apply the Single Responsibility Principle by designing a User Management System. We'll separate responsibilities into different classes: one for handling user data, another for user notifications, and a third for user authentication.
+
+### 1. Define a `User` Class
+
+The `User` class will handle user data management.
+
+```typescript
+// User.ts
+class User {
+  private username: string;
+  private password: string;
+
+  constructor(username: string, password: string) {
+    this.username = username;
+    this.password = password;
+  }
+
+  getUsername(): string {
+    return this.username;
+  }
+
+  getPassword(): string {
+    return this.password;
+  }
+}
+
+// UserNotification.ts
+class UserNotification {
+  sendWelcomeEmail(user: User): void {
+    console.log(`Sending welcome email to ${user.getUsername()}`);
+    // Add logic to send email
+  }
+
+  sendPasswordResetEmail(user: User): void {
+    console.log(`Sending password reset email to ${user.getUsername()}`);
+    // Add logic to send email
+  }
+}
+
+// UserAuthenticator.ts
+class UserAuthenticator {
+  authenticate(user: User, password: string): boolean {
+    // Here you would add logic to check the password
+    if (user.getPassword() === password) {
+      console.log(`User ${user.getUsername()} authenticated successfully.`);
+      return true;
+    } else {
+      console.log(`Authentication failed for user ${user.getUsername()}.`);
+      return false;
+    }
+  }
+}
+
+// main.ts
+const user = new User('john_doe', 'securepassword123');
+const userNotification = new UserNotification();
+const userAuthenticator = new UserAuthenticator();
+
+// Send a welcome email
+userNotification.sendWelcomeEmail(user);
+
+// Authenticate user
+const isAuthenticated = userAuthenticator.authenticate(user, 'securepassword123');
+
+if (isAuthenticated) {
+  console.log('User is authenticated');
+} else {
+  console.log('User is not authenticated');
+}
+
+````
 
 # Open/Closed Principle (OCP) Example in TypeScript
 
@@ -183,40 +260,6 @@ class PayPalPayment extends PaymentMethod {
   }
 }
 
-// CreditCardPayment.ts
-class CreditCardPayment extends PaymentMethod {
-  private cardNumber: string;
-  private expirationDate: string;
-
-  constructor(amount: number, cardNumber: string, expirationDate: string) {
-    super(amount);
-    this.cardNumber = cardNumber;
-    this.expirationDate = expirationDate;
-  }
-
-  processPayment(): void {
-    console.log(`Processing credit card payment of $${this.amount} using card: ${this.cardNumber}`);
-    // Add logic for credit card payment
-  }
-}
-
-// PayPalPayment.ts
-class PayPalPayment extends PaymentMethod {
-  private email: string;
-  private password: string;
-
-  constructor(amount: number, email: string, password: string) {
-    super(amount);
-    this.email = email;
-    this.password = password;
-  }
-
-  processPayment(): void {
-    console.log(`Processing PayPal payment of $${this.amount} using email: ${this.email}`);
-    // Add logic for PayPal payment
-  }
-}
-
 
 // main.ts
 const creditCardPayment = new CreditCardPayment(100, '4111111111111111', '12/25');
@@ -227,6 +270,198 @@ const payPalProcessor = new PaymentProcessor(payPalPayment);
 
 creditCardProcessor.process();
 payPalProcessor.process();
+```
 
+# Liskov Substitution Principle (LSP) Example in TypeScript
 
+The Liskov Substitution Principle (LSP) is one of the SOLID principles of object-oriented design. It states that objects of a superclass should be replaceable with objects of a subclass without affecting the correctness of the program. In other words, subclasses should extend the behavior of a superclass without changing its expected behavior.
+
+## Example: Shape Area Calculation
+
+In this example, we'll demonstrate how to apply the Liskov Substitution Principle by designing a system for calculating areas of different shapes. We'll use an abstract base class `Shape` and create concrete subclasses `Rectangle` and `Circle` that adhere to the principle.
+
+### 1. Define an Abstract Class `Shape`
+
+Create an abstract class `Shape` with an abstract method `calculateArea`.
+
+```typescript
+// Shape.ts
+abstract class Shape {
+  abstract calculateArea(): number;
+}
+// Rectangle.ts
+class Rectangle extends Shape {
+  private width: number;
+  private height: number;
+
+  constructor(width: number, height: number) {
+    super();
+    this.width = width;
+    this.height = height;
+  }
+
+  calculateArea(): number {
+    return this.width * this.height;
+  }
+}
+
+// Circle.ts
+class Circle extends Shape {
+  private radius: number;
+
+  constructor(radius: number) {
+    super();
+    this.radius = radius;
+  }
+
+  calculateArea(): number {
+    return Math.PI * this.radius * this.radius;
+  }
+}
+
+// main.ts
+const rectangle = new Rectangle(5, 10);
+const circle = new Circle(7);
+
+function printArea(shape: Shape) {
+  console.log(`The area of the shape is: ${shape.calculateArea()}`);
+}
+
+printArea(rectangle); // Output: The area of the shape is: 50
+printArea(circle); // Output: The area of the shape is: 153.93804002589985
+```
+
+# Interface Segregation Principle (ISP) Example in TypeScript
+
+The Interface Segregation Principle (ISP) is one of the SOLID principles of object-oriented design. It states that no client should be forced to depend on methods it does not use. This principle emphasizes the need for creating specific interfaces for different functionalities rather than a large, general-purpose interface.
+
+## Example: Printing and Scanning Devices
+
+In this example, we'll demonstrate how to apply the Interface Segregation Principle by designing a system for different types of devices: printers and scanners. We'll define separate interfaces for printing and scanning functionalities and ensure that each device only implements the interfaces it needs.
+
+### 1. Define Specific Interfaces
+
+Create interfaces for printing and scanning functionalities.
+
+```typescript
+// PrintInterface.ts
+interface PrintInterface {
+  print(document: string): void;
+}
+
+// ScanInterface.ts
+interface ScanInterface {
+  scan(document: string): void;
+}
+
+// Printer.ts
+class Printer implements PrintInterface {
+  print(document: string): void {
+    console.log(`Printing document: ${document}`);
+    // Add logic to print document
+  }
+}
+
+// Scanner.ts
+class Scanner implements ScanInterface {
+  scan(document: string): void {
+    console.log(`Scanning document: ${document}`);
+    // Add logic to scan document
+  }
+}
+
+// MultiFunctionPrinter.ts
+class MultiFunctionPrinter implements PrintInterface, ScanInterface {
+  print(document: string): void {
+    console.log(`Printing document: ${document}`);
+    // Add logic to print document
+  }
+
+  scan(document: string): void {
+    console.log(`Scanning document: ${document}`);
+    // Add logic to scan document
+  }
+}
+
+// main.ts
+const printer = new Printer();
+const scanner = new Scanner();
+const multiFunctionPrinter = new MultiFunctionPrinter();
+
+printer.print("Document1.pdf");
+scanner.scan("Document2.pdf");
+multiFunctionPrinter.print("Document3.pdf");
+multiFunctionPrinter.scan("Document4.pdf");
+```
+
+# Dependency Inversion Principle (DIP) Example in TypeScript
+
+The Dependency Inversion Principle (DIP) is one of the SOLID principles of object-oriented design. It states that high-level modules should not depend on low-level modules. Instead, both should depend on abstractions. Furthermore, abstractions should not depend on details. Details should depend on abstractions. This principle helps in achieving loose coupling between components.
+
+## Example: Notification System
+
+In this example, we'll demonstrate how to apply the Dependency Inversion Principle by designing a notification system. We'll define an interface for notifications and create concrete implementations for different types of notifications. We'll use dependency injection to ensure that high-level modules depend on abstractions rather than concrete implementations.
+
+### 1. Define a `Notification` Interface
+
+Create an interface that defines the contract for notifications.
+
+```typescript
+// Notification.ts
+interface Notification {
+  send(message: string): void;
+}
+
+// EmailNotification.ts
+class EmailNotification implements Notification {
+  private emailAddress: string;
+
+  constructor(emailAddress: string) {
+    this.emailAddress = emailAddress;
+  }
+
+  send(message: string): void {
+    console.log(
+      `Sending email to ${this.emailAddress} with message: ${message}`
+    );
+    // Add logic to send email
+  }
+}
+
+// SMSNotification.ts
+class SMSNotification implements Notification {
+  private phoneNumber: string;
+
+  constructor(phoneNumber: string) {
+    this.phoneNumber = phoneNumber;
+  }
+
+  send(message: string): void {
+    console.log(`Sending SMS to ${this.phoneNumber} with message: ${message}`);
+    // Add logic to send SMS
+  }
+}
+
+// UserService.ts
+class UserService {
+  private notification: Notification;
+
+  constructor(notification: Notification) {
+    this.notification = notification;
+  }
+
+  notifyUser(message: string): void {
+    this.notification.send(message);
+  }
+}
+
+// main.ts
+const emailNotification = new EmailNotification("user@example.com");
+const smsNotification = new SMSNotification("123-456-7890");
+
+const userServiceWithEmail = new UserService(emailNotification);
+const userServiceWithSMS = new UserService(smsNotification);
+
+userServiceWithEmail.notifyUser("Welcome to our service!");
+userServiceWithSMS.notifyUser("Your verification code is 123456");
 ```
