@@ -1,30 +1,32 @@
 abstract class LibraryItem {
-    constructor(private itemId: number) { };
+    constructor(public itemId: number, public title: string) { };
     public getDetails(): void {
-        console.log(`Library item id is ${this.itemId}`);
+        console.log(`Library item title is "${this.title}" with ID: ${this.itemId}`);
     }
 }
 
-class GeneralBooks {
-    constructor(public title: string, public author: string, public publishedDate: string) { }
+class GeneralBooks extends LibraryItem {
+    constructor(itemId: number, public title: string, public author: string, public publishedDate: string) {
+        super(itemId, title);
+     }
 
 }
 
 class FictionBook extends GeneralBooks {
-    constructor(public title: string, public author: string, public publishedDate: string) {
-        super(title, author, publishedDate);
+    constructor(itemId: number, public title: string, public author: string, public publishedDate: string) {
+        super(itemId, title, author, publishedDate);
     }
 }
 
 class NonFictionBook extends GeneralBooks {
-    constructor(public title: string, public author: string, public publishedDate: string) {
-        super(title, author, publishedDate);
+    constructor(itemId: number, public title: string, public author: string, public publishedDate: string) {
+        super(itemId, title, author, publishedDate);
     }
 }
 
 class ReferenceBook extends GeneralBooks {
-    constructor(public title: string, public author: string, public publishedDate: string) {
-        super(title, author, publishedDate);
+    constructor(itemId: number, public title: string, public author: string, public publishedDate: string) {
+        super(itemId, title, author, publishedDate);
     }
 }
 
@@ -90,11 +92,29 @@ class ChildMember extends LibraryMember {
 };
 
 
-const fictionBook = new FictionBook("Gone with the Wind", "Margaret Mitchell", "1936");
-const nonFictionBook = new NonFictionBook("Sapiens: A Brief History of Humankind", "Yuval Noah Harari", "2014");
+class LibraryStore<T extends LibraryItem>{
+    public storedItems: T[] = [];
+
+    public addToStore(item: T):void {
+        this.storedItems.push(item);
+    }
+
+    public retriveBook(itemId: number): void{
+        const getItem = this.storedItems.find(item => item.itemId === itemId);
+        getItem?.getDetails();
+    }
+}
+
+
+const fictionBook = new FictionBook(1000, "Gone with the Wind", "Margaret Mitchell", "1936");
+const nonFictionBook = new NonFictionBook(1001, "Sapiens: A Brief History of Humankind", "Yuval Noah Harari", "2014");
 
 const adultMember = new AdultMember(0o1, "Aziza");
 const childMember = new ChildMember(0o2, "Rose");
 adultMember.borrowBooks(fictionBook, 5);
 childMember.borrowBooks(nonFictionBook, 7);
 childMember.borrowBooks(fictionBook, 7);
+
+const libStore = new LibraryStore<FictionBook>();
+libStore.addToStore(fictionBook);
+libStore.retriveBook(1000);
