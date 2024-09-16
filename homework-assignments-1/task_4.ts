@@ -114,7 +114,7 @@ class PayPal extends Payment{
         console.log(`The payment is processing by Paypal for ${this.amount} amount for order...`);
     }
 }
- interface ShippingService {
+interface ShippingService {
     shipOrder(order: PhysicalOrder):void
  }
 
