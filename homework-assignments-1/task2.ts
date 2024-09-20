@@ -7,7 +7,11 @@ class User {
     this.#_password = password;
   }
 
-  validateLogin(inputPassword: string) {
-    return this.#_password === inputPassword;
+  public validateLogin(inputPassword: string): boolean {
+    return this.checkPassword(inputPassword);
+  }
+
+  private checkPassword(inputPassword: string): boolean {
+    return inputPassword === this.#_password;
   }
 }

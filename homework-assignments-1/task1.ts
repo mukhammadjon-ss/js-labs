@@ -1,7 +1,7 @@
-class Shape {
+abstract class Shape {
   constructor() {}
 
-  calculateArea() {}
+  abstract calculateArea(): number;
 }
 
 class Circle extends Shape {

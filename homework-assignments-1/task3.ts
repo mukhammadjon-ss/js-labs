@@ -15,6 +15,10 @@ class Library {
     this.books = [];
   }
 
+  listBooks() {
+    return this.books;
+  }
+
   addBook(book: Book) {
     this.books.push(book);
   }
