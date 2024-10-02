@@ -1,134 +1,141 @@
 abstract class LibraryItem {
-  constructor(public id: number) {}
+  constructor(public id: string) {}
 
   abstract getDetails(): string;
 }
 
-abstract class Book extends LibraryItem {
+class Book extends LibraryItem {
   constructor(
-    id: number,
+    id: string,
     public title: string,
     public author: string,
     public publishedDate: Date
   ) {
     super(id);
-    this.title = title;
-    this.author = author;
-    this.publishedDate = new Date();
   }
 
-  filledBookInfo(): boolean {
-    return !!this.title && !!this.author && !!this.publishedDate;
+  getDetails(): string {
+    return `Book title ${this.title}, author ${this.author}, published date ${this.publishedDate}`;
   }
 }
 
 class FictionBook extends Book {
-  constructor(id: number, title: string, author: string, publishedDate: Date) {
+  constructor(
+    public genre: string,
+    id: string,
+    title: string,
+    author: string,
+    publishedDate: Date
+  ) {
     super(id, title, author, publishedDate);
   }
 
   getDetails(): string {
-    return `Fiction Book: ${this.title} by ${this.author}`;
-  }
-}
-
-class NonFictionBook extends Book {
-  constructor(id: number, title: string, author: string, publishedDate: Date) {
-    super(id, title, author, publishedDate);
-  }
-
-  getDetails(): string {
-    return `Non-Fiction Book: ${this.title} by ${this.author}`;
+    return `Book title ${this.title}, author ${this.author}, published date ${this.publishedDate}, Genre ${this.genre}`;
   }
 }
 
 class ReferenceBook extends Book {
-  constructor(id: number, title: string, author: string, publishedDate: Date) {
+  constructor(id: string, title: string, author: string, publishedDate: Date) {
     super(id, title, author, publishedDate);
   }
 
   getDetails(): string {
-    return `Reference Book: ${this.title} by ${this.author}`;
+    return `Book title ${this.title}, author ${this.author}, published date ${this.publishedDate}, Book Type = Reference book`;
+  }
+}
+
+class NonFictionBook extends Book {
+  constructor(
+    public category: string,
+    id: string,
+    title: string,
+    author: string,
+    publishedDate: Date
+  ) {
+    super(id, title, author, publishedDate);
+  }
+
+  getDetails(): string {
+    return `Book title ${this.title}, author ${this.author}, published date ${this.publishedDate}, Genre ${this.category}`;
   }
 }
 
 abstract class LibraryMember {
-  constructor(
-    public id: number,
-    public name: string,
-    protected borrowedItems: LibraryItem[] = []
-  ) {
-    this.id = Math.random();
-    this.name = name;
+  borrowedItems: LibraryItem[];
+
+  constructor(public id: number, public name: string) {
+    this.borrowedItems = [];
   }
 
-  abstract borrowItem(book: Book): void;
-  abstract returnBook(book: Book): void;
-
-  getBorrowedItems(): LibraryItem[] {
-    return this.borrowedItems;
-  }
-
-  // canBorrow(bookId: number): boolean {
-  //   console.log(bookId);
-  //   return this.books.findIndex(({ id }) => id === bookId) < 0;
-  // }
+  abstract borrowItem(item: LibraryItem): void;
+  abstract returnItem(item: LibraryItem): void;
 }
 
-class Student extends LibraryMember {
+class AdultMember extends LibraryMember {
+  borrowCost: number;
+
   constructor(id: number, name: string) {
-    super(id, name, []);
+    super(id, name);
   }
 
   borrowItem(item: LibraryItem): void {
     this.borrowedItems.push(item);
-    console.log(`${this.name} borrowed: ${item.getDetails()}`);
   }
 
-  returnBook(book: Book): void {}
+  returnItem(item: LibraryItem): void {
+    this.borrowedItems.filter((borrowedItem) => borrowedItem !== item);
+  }
 }
 
-class Library<T> {
-  private items: T[] = [];
+class ChildMember extends LibraryMember {
+  borrowCost: number;
 
-  addItem(item: T): void {
+  constructor(id: number, name: string) {
+    super(id, name);
+  }
+
+  borrowItem(item: LibraryItem): void {
+    this.borrowedItems.push(item);
+  }
+
+  returnItem(item: LibraryItem): void {
+    this.borrowedItems.filter((borrowedItem) => borrowedItem !== item);
+  }
+}
+
+class Loan {
+  loanDate: Date;
+  returnDate: Date | null;
+
+  constructor(public member: LibraryMember, public item: LibraryItem) {
+    this.loanDate = new Date();
+    this.returnDate = null;
+  }
+
+  returnItem(): void {
+    this.returnDate = new Date();
+  }
+}
+
+class Library<T extends LibraryItem> {
+  items: T[];
+
+  constructor() {
+    this.items = [];
+  }
+
+  addItem(item: T) {
     this.items.push(item);
   }
 
-  getItems(): T[] {
-    return this.items;
+  retrieveItem(id: string): T | undefined {
+    return this.items.find((item) => item.id === id);
   }
 }
 
-// Create library instance
-const library = new Library<Book>();
-
-// Create books
-const fictionBook = new FictionBook(
-  1,
-  "Dune",
-  "Frank Herbert",
-  new Date("1965-08-01")
-);
-const nonFictionBook = new NonFictionBook(
-  2,
-  "Sapiens",
-  "Yuval Noah Harari",
-  new Date("2011-01-01")
-);
-
-// Add books to library
-library.addItem(fictionBook);
-library.addItem(nonFictionBook);
-
-// Create members
-const adultMember = new Student(1, "John Doe");
-
-// Members borrow items
-adultMember.borrowItem(fictionBook);
-
-// Print borrowed items
-console.log(
-  "Adult Member's Borrowed Items:",
-  adultMember.getBorrowedItems().map((item) => item.getDetails())
-);
+function processLibraryItems(items: LibraryItem[]): void {
+  items.forEach((item) => {
+    console.log(item.getDetails());
+  });
+}

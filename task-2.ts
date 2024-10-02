@@ -4,7 +4,7 @@ class User {
     this.password = password;
   }
 
-  validateLogin(inputPassword: string) {
+  private validateLogin(inputPassword: string) {
     if (inputPassword !== this.password) return false;
     return true;
   }

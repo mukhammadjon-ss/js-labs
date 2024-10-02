@@ -1,27 +1,25 @@
-class Library {
-  constructor(public books: Book[]) {
-    this.books = books;
-  }
-
-  add(newBook: Book) {
-    if ("author" in newBook && "isbn" in newBook && "title" in newBook) {
-      this.books.push(newBook);
-    }
-  }
-
-  remove(isbn: string) {
-    this.books = this.books.filter((book) => book.isbn !== isbn);
-  }
-}
-
 class Book {
-  constructor(
-    public title: string,
-    public author: string,
-    public isbn: string
-  ) {
+  constructor(title, author, isbn) {
     this.title = title;
     this.author = author;
     this.isbn = isbn;
+  }
+}
+
+class Library {
+  constructor() {
+    this.books = [];
+  }
+
+  addBook(book) {
+    this.books.push(book);
+  }
+
+  removeBook(isbn) {
+    for (let i = 0; i < this.books.length; ++i) {
+      if (this.books[i].isbn === isbn) {
+        return this.books[i] && this.books.splice(i, 1);
+      }
+    }
   }
 }
